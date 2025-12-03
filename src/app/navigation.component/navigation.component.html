@@ -1,0 +1,68 @@
+<!-- Navegación para desktop -->
+<nav class="navbar desktop-nav">
+  <div class="nav-brand">
+    <span class="logo">🏛️</span>
+    <h1 class="title">Arquitectura de Software</h1>
+  </div>
+  
+  <div class="nav-menu">
+    <a 
+      *ngFor="let item of menuItems" 
+      [routerLink]="item.path" 
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{exact: true}"
+      class="nav-link">
+      <span class="nav-icon">{{item.icon}}</span>
+      {{item.label}}
+    </a>
+  </div>
+
+  <div class="nav-actions">
+    <button class="btn-login" (click)="navigateTo('/login')">
+      <span>👤</span> Ingresar
+    </button>
+  </div>
+</nav>
+
+<!-- Navegación para móvil -->
+<nav class="navbar mobile-nav">
+  <div class="mobile-header">
+    <div class="mobile-brand">
+      <span class="logo">🏛️</span>
+      <span class="title">Arq. Software</span>
+    </div>
+    
+    <button class="menu-toggle" (click)="toggleMobileMenu()">
+      <span class="hamburger" [class.open]="isMobileMenuOpen">
+        ☰
+      </span>
+    </button>
+  </div>
+
+  <!-- Menú desplegable móvil -->
+  <div class="mobile-menu" [class.open]="isMobileMenuOpen">
+    <div class="mobile-menu-header">
+      <h3>Menú de Navegación</h3>
+      <button class="close-btn" (click)="closeMobileMenu()">×</button>
+    </div>
+    
+    <div class="mobile-menu-items">
+      <a 
+        *ngFor="let item of menuItems" 
+        [routerLink]="item.path" 
+        (click)="navigateTo(item.path)"
+        class="mobile-nav-link"
+        [class.active]="isActive(item.path)">
+        <span class="mobile-nav-icon">{{item.icon}}</span>
+        {{item.label}}
+        <span class="arrow">→</span>
+      </a>
+    </div>
+
+    <div class="mobile-footer">
+      <button class="mobile-btn-login" (click)="navigateTo('/login')">
+        <span>👤</span> Ingresar al Sistema
+      </button>
+    </div>
+  </div>
+</nav>
