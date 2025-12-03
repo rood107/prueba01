@@ -9,4 +9,5 @@ import { RouterOutlet } from '@angular/router';
 })
 export class App {
   protected readonly title = signal('prueba01');
+  //console.log("Mi frontend esta funcionando");
 }
