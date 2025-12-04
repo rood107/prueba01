@@ -1,67 +1,65 @@
 <!-- Navegación para desktop -->
-<nav class="navbar desktop-nav">
-  <div class="nav-brand">
+<nav class="navbar navbar-expand-lg navbar-light bg-light mb-3 desktop-nav">
+  <div class="container-fluid nav-brand d-flex align-items-center">
     <span class="logo">🏛️</span>
-    <h1 class="title">Arquitectura de Software</h1>
-  </div>
-  
-  <div class="nav-menu">
-    <a 
-      *ngFor="let item of menuItems" 
-      [routerLink]="item.path" 
-      routerLinkActive="active"
-      [routerLinkActiveOptions]="{exact: true}"
-      class="nav-link">
-      <span class="nav-icon">{{item.icon}}</span>
-      {{item.label}}
-    </a>
-  </div>
+    <h1 class="h5 mb-0 ms-2">Arquitectura de Software</h1>
 
-  <div class="nav-actions">
-    <button class="btn-login" (click)="navigateTo('/login')">
-      <span>👤</span> Ingresar
-    </button>
+    <div class="nav-menu d-flex gap-2 ms-auto align-items-center">
+      <a 
+        *ngFor="let item of menuItems" 
+        [routerLink]="item.path" 
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{exact: true}"
+        class="nav-link">
+        <span class="nav-icon">{{item.icon}}</span>
+        {{item.label}}
+      </a>
+
+      <div class="nav-actions">
+        <button class="btn btn-outline-primary ms-3" (click)="navigateTo('/login')">
+          <span>👤</span> Ingresar
+        </button>
+      </div>
+    </div>
   </div>
 </nav>
 
 <!-- Navegación para móvil -->
-<nav class="navbar mobile-nav">
-  <div class="mobile-header">
-    <div class="mobile-brand">
+<nav class="navbar d-lg-none bg-light mobile-nav">
+  <div class="container-fluid mobile-header d-flex align-items-center justify-content-between">
+    <div class="mobile-brand d-flex align-items-center">
       <span class="logo">🏛️</span>
-      <span class="title">Arq. Software</span>
+      <span class="title ms-2">Arq. Software</span>
     </div>
-    
-    <button class="menu-toggle" (click)="toggleMobileMenu()">
-      <span class="hamburger" [class.open]="isMobileMenuOpen">
-        ☰
-      </span>
+
+    <button class="btn btn-outline-secondary" (click)="toggleMobileMenu()">
+      <span class="hamburger" [class.open]="isMobileMenuOpen">☰</span>
     </button>
   </div>
 
   <!-- Menú desplegable móvil -->
-  <div class="mobile-menu" [class.open]="isMobileMenuOpen">
-    <div class="mobile-menu-header">
-      <h3>Menú de Navegación</h3>
-      <button class="close-btn" (click)="closeMobileMenu()">×</button>
+  <div class="mobile-menu p-3" [class.open]="isMobileMenuOpen">
+    <div class="mobile-menu-header d-flex justify-content-between align-items-center mb-2">
+      <h3 class="h6 mb-0">Menú de Navegación</h3>
+      <button class="btn btn-close" (click)="closeMobileMenu()">×</button>
     </div>
     
-    <div class="mobile-menu-items">
+    <div class="mobile-menu-items d-flex flex-column gap-2 mb-3">
       <a 
         *ngFor="let item of menuItems" 
         [routerLink]="item.path" 
         (click)="navigateTo(item.path)"
-        class="mobile-nav-link"
+        class="mobile-nav-link btn btn-light text-start"
         [class.active]="isActive(item.path)">
-        <span class="mobile-nav-icon">{{item.icon}}</span>
+        <span class="mobile-nav-icon me-2">{{item.icon}}</span>
         {{item.label}}
-        <span class="arrow">→</span>
+        <span class="arrow float-end">→</span>
       </a>
     </div>
 
     <div class="mobile-footer">
-      <button class="mobile-btn-login" (click)="navigateTo('/login')">
-        <span>👤</span> Ingresar al Sistema
+      <button class="btn btn-primary w-100" (click)="navigateTo('/login')">
+        <span>👤</span> Ingresar al Sistema del Hotel
       </button>
     </div>
   </div>
