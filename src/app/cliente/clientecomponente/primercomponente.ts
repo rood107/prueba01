@@ -1,4 +1,4 @@
-import { Component, NgModule, OnInit } from '@angular/core';
+import { Component, NgModule, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ClienteModelTs } from '../model/cliente.model';
 import { ClienteServiceTs } from '../service/cliente.service';
 import { FormsModule } from '@angular/forms';
@@ -9,10 +9,10 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   templateUrl: './primercomponente.html',
   styleUrls: ['./primercomponente.css'],
-  imports: [FormsModule,CommonModule]
+  imports: [FormsModule, CommonModule]
 })
 export class Primercomponente implements OnInit {
-  public clientes:ClienteModelTs[]=[];
+  public clientes: ClienteModelTs[] = [];
   searchId: number = 0;
   clienteSeleccionado: ClienteModelTs | null = null;
   nuevoCliente: ClienteModelTs = {
@@ -23,10 +23,14 @@ export class Primercomponente implements OnInit {
   };
   loading = false;
   error: string | null = null;
+  saving = false;
 
-  constructor(private clienteService: ClienteServiceTs) { }
+  constructor(
+    private clienteService: ClienteServiceTs,
+    private cdr: ChangeDetectorRef
+  ) { }
 
-  ngOnInit(){
+  ngOnInit() {
     this.loadClientes();
   }
   loadClientes(): void {
@@ -34,9 +38,9 @@ export class Primercomponente implements OnInit {
     this.clienteService.getAll().subscribe({
       next: (data) => {
         this.clientes = data;
-        console.log(data);
-        
+        console.log('Clientes cargados:', data);
         this.loading = false;
+        this.cdr.detectChanges(); // Forzar detección de cambios
       },
       error: (error) => {
         this.error = 'Error al cargar los clientes';
@@ -46,14 +50,24 @@ export class Primercomponente implements OnInit {
   }
   // Create: Crear un nuevo cliente
   create(): void {
-    console.log(this.nuevoCliente);
+    this.saving = true;
+    console.log('Creando cliente:', this.nuevoCliente);
+
     this.clienteService.create(this.nuevoCliente).subscribe({
       next: (cliente) => {
+        console.log('Cliente creado:', cliente);
+        // Actualización inmutable para forzar detección de cambios
         this.clientes = [...this.clientes, cliente];
-        this.nuevoCliente = { nombre: '', email: '', telefono: '', documentoIdentidad: '' };  // Limpiar formulario
-        alert('Cliente creado exitosamente');
+        this.nuevoCliente = { nombre: '', email: '', telefono: '', documentoIdentidad: '' };
+        this.saving = false;
+        console.log('Lista actualizada. Total clientes:', this.clientes.length);
+        this.cdr.detectChanges(); // Forzar detección de cambios
       },
-      error: (err) => alert('Error al crear cliente: ' + err.message)
+      error: (err) => {
+        console.error('Error al crear cliente:', err);
+        alert('Error al crear cliente: ' + err.message);
+        this.saving = false;
+      }
     });
   }
   // findById: Buscar cliente por ID
@@ -66,13 +80,22 @@ export class Primercomponente implements OnInit {
   // Update: Actualizar un cliente existente
   update(cliente: ClienteModelTs): void {
     if (cliente.id) {
+      this.saving = true;
       this.clienteService.update(cliente.id, cliente).subscribe({
         next: () => {
-          const index = this.clientes.findIndex(c => c.id === cliente.id);
-          if (index !== -1) this.clientes[index] = cliente;
-          alert('Cliente actualizado exitosamente');
+          // Actualización inmutable
+          this.clientes = this.clientes.map(c =>
+            c.id === cliente.id ? cliente : c
+          );
+          this.clienteSeleccionado = null;
+          this.saving = false;
+          console.log('Cliente actualizado exitosamente');
+          this.cdr.detectChanges(); // Forzar detección de cambios
         },
-        error: (err) => alert('Error al actualizar cliente: ' + err.message)
+        error: (err) => {
+          alert('Error al actualizar cliente: ' + err.message);
+          this.saving = false;
+        }
       });
     }
   }
