@@ -1,6 +1,6 @@
 import { Component, NgModule, OnInit } from '@angular/core';
-import { ClienteModelTs } from '../model/cliente.model.ts';
-import { ClienteServiceTs } from '../service/cliente.service.ts.js';
+import { ClienteModelTs } from '../model/cliente.model';
+import { ClienteServiceTs } from '../service/cliente.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
@@ -49,7 +49,7 @@ export class Primercomponente implements OnInit {
     console.log(this.nuevoCliente);
     this.clienteService.create(this.nuevoCliente).subscribe({
       next: (cliente) => {
-        this.clientes.push(cliente);
+        this.clientes = [...this.clientes, cliente];
         this.nuevoCliente = { nombre: '', email: '', telefono: '', documentoIdentidad: '' };  // Limpiar formulario
         alert('Cliente creado exitosamente');
       },

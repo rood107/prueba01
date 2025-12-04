@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ClienteModelTs } from '../model/cliente.model.ts';
+import { ClienteModelTs } from '../model/cliente.model';
 
 @Injectable({
   providedIn: 'root',
@@ -50,5 +50,5 @@ export class ClienteServiceTs {
   getByEmail(email: string): Observable<ClienteModelTs> {
     return this.http.get<ClienteModelTs>(`${this.apiUrl}/email/${email}`);
   }
-  
+
 }
